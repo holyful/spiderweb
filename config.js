@@ -11,9 +11,11 @@ var options = {
     /**
      * 并发phantom进程数
      */
-    concurrentWorkers: 5,
+    concurrentWorkers: 10,
 
-
+    /**
+     * 需要特别处理的url规则
+     */
     specialUrl: {
         weixin : 'http://mm.dianping.com/weixin'
     }

@@ -10,16 +10,17 @@ var http = require('http'),
     crypto = require('crypto'),
     fs = require('fs'),
     spawnCount = 0,
-    requestQueue = [];
+    requestQueue = [],
+    date = new Date();
 
-http.createServer(function (req, res) {
+var server = http.createServer(function (req, res) {
 
     var targetQuery = url.parse(req.url).query ? url.parse(req.url).query : null,
         targetUrl = null, resData = null;
     if(targetQuery){
         targetUrl = queryString.parse(targetQuery).targetUrl;
     }
-    var date = new Date(), resData = '', crawl = null,
+    var resData = '', crawl = null,
         responseLogic = function(resData){
             if(resData != ''){
                 req.setEncoding('utf8');
@@ -31,42 +32,44 @@ http.createServer(function (req, res) {
                 res.writeHead(404);
             }
 
-            console.info('Process ended at ' + date.getTime());
+            console.info('['+date.getTime()+'] Process ended at ' + date.getTime());
         }
 
     if(targetUrl){
         try{
-            console.info('-----------------------------------------');
-            console.info('Target url '+ targetUrl);
-            console.info('Process started at ' + date.getTime());
+            console.info('['+date.getTime()+'] -----------------------------------------');
+            console.info('['+date.getTime()+'] Target url '+ targetUrl);
+            console.info('['+date.getTime()+'] Process started at ' + date.getTime());
             var fileHash = crypto.createHash('md5').update(targetUrl+"").digest('hex'),
-                filePath = configs.cacheDirectory + '/' + fileHash + '.html';
+                filePath = configs.cacheDirectory  + fileHash + '.html';
 
 
             fs.exists(filePath, function(exists) {
                 if (exists) {
-                    console.info('Cache found, start reading at ' + date.getTime());
-                    fs.readFile(filePath, function (err, data) {
-                        if (err) throw err;
-                        responseLogic(data);
-                    });
+                    console.info('['+date.getTime()+'] Cache found, start reading');
+                    resData = fs.readFileSync(filePath);
+                    responseLogic(resData);
                 } else {
 
                     if(spawnCount >= configs.concurrentWorkers){
                         res.writeHead(404);
                         res.end('');
                     }
-                    crawl = fork('spider/app.js',[targetUrl]);
+                    try{
+                        crawl = fork('crawl/app.js',[targetUrl]);
+                    }catch(e){
+                        console.error('['+date.getTime()+']' + e.message);
+                    }
                     spawnCount ++;
-                    console.info('Cache empty, starting calling crawl at ' + date.getTime());
-                    console.info('...Processing...');
+                    console.info('['+date.getTime()+'] Cache empty, starting calling crawl');
+                    console.info('['+date.getTime()+'] ...Processing...');
                     crawl.on('message',function(result){
                         resData += result.data;
                     });
                     crawl.on('exit',function(){
                         fs.writeFile(filePath, resData, function (err) {
                             if (err) throw err;
-                            console.info('Cache saved at ' + date.getTime());
+                            console.info('['+date.getTime()+'] Cache saved as '+ filePath);
                         });
                         spawnCount --;
                         responseLogic(resData);
@@ -78,8 +81,8 @@ http.createServer(function (req, res) {
 
 
         }catch(e){
+            console.error('['+date.getTime()+']' + e.message);
             res.writeHead(404);
-            console.log(e);
             res.end('');
         }
     }else{
@@ -89,3 +92,7 @@ http.createServer(function (req, res) {
 
 
 }).listen(5542, "127.0.0.1");
+
+server.on('error',function(e){
+    console.error('['+date.getTime()+']' + e.message);
+})
