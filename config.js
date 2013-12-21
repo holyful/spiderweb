@@ -17,7 +17,7 @@ var options = {
      * 需要特别处理的url规则
      */
     specialUrl: {
-        weixin : 'http://mm.dianping.com/weixin'
+       'http://mm.dianping.com/weixin': ['test.js']
     }
 
 
