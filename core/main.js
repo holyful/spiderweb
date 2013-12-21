@@ -7,11 +7,14 @@ var http = require('http'),
     configs = require('../config.js'),
     childProcess = require('child_process'),
     fork = childProcess.fork,
+    spawn = childProcess.spawn,
+    exec = childProcess.exec,
     crypto = require('crypto'),
     fs = require('fs'),
     spawnCount = 0,
     requestQueue = [],
     date = new Date();
+
 
 var server = http.createServer(function (req, res) {
 
@@ -56,7 +59,8 @@ var server = http.createServer(function (req, res) {
                         res.end('');
                     }
                     try{
-                        crawl = fork('spider/app.js',[targetUrl]);
+                        crawl = spawn('phantomjs',['spider/app.js',targetUrl]);
+
                     }catch(e){
                         console.error('['+date.getTime()+']' + e.message);
                     }
@@ -67,10 +71,10 @@ var server = http.createServer(function (req, res) {
                         resData += result.data;
                     });
                     crawl.on('exit',function(){
-                        fs.writeFile(filePath, resData, function (err) {
+                       /* fs.writeFile(filePath, resData, function (err) {
                             if (err) throw err;
                             console.info('['+date.getTime()+'] Cache saved as '+ filePath);
-                        });
+                        });*/
                         spawnCount --;
                         responseLogic(resData);
 
@@ -95,4 +99,4 @@ var server = http.createServer(function (req, res) {
 
 server.on('error',function(e){
     console.error('['+date.getTime()+']' + e.message);
-})
+});
