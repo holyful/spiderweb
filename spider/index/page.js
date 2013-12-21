@@ -16,11 +16,13 @@ Page.extend = function(s,ext){
 function _filter(url,reg){
 	var result = false;
 
-	for(key in reg){
+	if(url){
+		for(key in reg){
 
-		if(url.indexOf(key) != -1){
-			result = reg[key];
-			break;
+			if(url.indexOf(key) != -1){
+				result = reg[key];
+				break;
+			}
 		}
 	}
 
