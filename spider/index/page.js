@@ -5,11 +5,6 @@
 var Util = require("../base/util");
 
 
-dbg = function(p){
-	console.log(!Util.isObject(p) ? p : JSON.stringify(p));
-}
-
-
 var _Cache = {};
 
 Page.extend = function(s,ext){
@@ -18,10 +13,26 @@ Page.extend = function(s,ext){
 	}
 }
 
+function _filter(url,reg){
+	var result = false;
+
+	for(key in reg){
+
+		if(url.indexOf(key) != -1){
+			result = reg[key];
+			break;
+		}
+	}
+
+
+	return {url:url,filter:result}
+}
+
+
 
 function Page(options){
 	
-	Util.mix(this,options);
+	Util.mix(this,_filter(options.url,options.filter));
 
 }
 
@@ -34,7 +45,11 @@ Page.prototype.init = function(){
 
 
 	page.open(self.url,function(){
-		self.injectHook();
+
+		self.regListener = self.filter.length || 0;
+
+		!self.regListener ? self.injectHook() : self.fire("success");
+
 	})
 
 	//回调
@@ -53,7 +68,9 @@ Page.prototype._callback = function(){
 
 	this.page.onCallback = function(data) {
 
-	 	self.fire("success");
+		self.regListener--;
+
+	 	!self.regListener && self.fire("success");
 
 	};
 
@@ -64,7 +81,13 @@ Page.prototype.injectHook = function(){
 
 	var self = this;
 
-	return	self.filter ? self.page.injectJs('./index/hook/'+self.filter.replace(/(\.js)$/,"")+".js") : false;
+	var item;
+
+
+	while(item = self.filter.pop()){
+		self.page.injectJs('./index/hook/'+item.replace(/(\.js)$/,"")+".js");
+	}
+
 }
 
 
@@ -116,7 +139,7 @@ Page.prototype.fire = function(type){
 	    	
 	    	var item = params[index];
 
-	    	Util.isFunction(item) && (item.call(self.page));
+	    	Util.isFunction(item) && (item.call(self.page,self.page));
 	   
 	    }
 	 }
