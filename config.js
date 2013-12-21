@@ -25,6 +25,11 @@ var options = {
     concurrentWorkers: 10,
 
     /**
+     * 是否启用并发
+     */
+    concurrent : false,
+
+    /**
      * 需要特别处理的url规则
      */
     specialUrl: {

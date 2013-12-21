@@ -4,7 +4,7 @@
 var http = require('http'),
     url = require('url'),
     queryString = require('querystring'),
-    configs = require('../config.js'),
+    configs = require(__dirname + '/../config.js'),
     childProcess = require('child_process'),
     fork = childProcess.fork,
     spawn = childProcess.spawn,
@@ -20,7 +20,7 @@ var http = require('http'),
         return (new Date());
     };
 
-if (cluster.isMaster) {
+if (cluster.isMaster && configs.concurrent) {
     //创建集群
     for (var i = 0; i < numWks; i++) {
         cluster.fork();
@@ -30,7 +30,7 @@ if (cluster.isMaster) {
         console.info('['+date().getTime()+'] worker ' + worker.process.pid + ' died.');
     });
 
-    cluster.on('listening', function(worker, code, signal) {
+    cluster.on('online', function(worker, code, signal) {
         console.info('['+date().getTime()+'] worker ' + worker.process.pid + ' is now serving.');
     });
 
@@ -57,7 +57,7 @@ if (cluster.isMaster) {
                 console.info('['+date().getTime()+'] Target url '+ targetUrl);
                 console.info('['+date().getTime()+'] Process started at ' + date().getTime());
                 var fileHash = crypto.createHash('md5').update(targetUrl+"").digest('hex'),
-                    filePath = configs.cacheDirectory  + fileHash + '.html';
+                    filePath = __dirname + '/../' + configs.cacheDirectory  + fileHash + '.html';
 
                 fs.exists(filePath, function(exists) {
                     if (exists) {
@@ -79,7 +79,7 @@ if (cluster.isMaster) {
 
                     } else {
                         try{
-                            crawl = spawn('phantomjs',['./spider/app.js',targetUrl]);
+                            crawl = spawn('phantomjs',[__dirname + '/../spider/app.js',targetUrl]);
                         }catch(e){
                             console.error('['+date().getTime()+'] ' + e.message);
                         }
