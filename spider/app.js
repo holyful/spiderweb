@@ -12,7 +12,7 @@ var __CONFIG__ = require("./base/config");
 
 var Page = require("./index/page.js");
 
-
+/*
 var service = server.listen(__CONFIG__.port, function(req, res) {
   		
 		var postData =  "" ;
@@ -38,4 +38,14 @@ var service = server.listen(__CONFIG__.port, function(req, res) {
 });
 
 
-console.log("server started");
+console.log("server started");*/
+
+
+process.argv.forEach(function (val, index, array) {
+    if(index === 2){
+        targetUrl = val;
+    }
+});
+//-------
+process.send({data:data });
+process.exit();
