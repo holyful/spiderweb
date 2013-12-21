@@ -3,3 +3,4 @@ node_js:
    - "0.10.21"
 before_scripts:
   - npm install phantomjs@1.9.2
+  - npm install webserver@1.1.2
