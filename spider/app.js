@@ -1,6 +1,6 @@
-var webserver = require('webserver');
+// var webserver = require('webserver');
 
-var server = webserver.create();
+// var server = webserver.create();
 
 var Page = require("./index/page");
 
@@ -9,43 +9,29 @@ var __CONFIG__ = require("./base/config");
 var Util = require('./base/util');
 
 
-var service = server.listen(__CONFIG__.port, function(req, res) {
+// var service = server.listen(__CONFIG__.port, function(req, res) {
   		
 
 
-		var query = Util.parse(req.url);
+// var query = Util.parse(req.url);
+
+var url = "http://mm.dianping.com/weixin";
+
+var reg = __CONFIG__["filter"];
+
+var page = new Page({url:"http://mm.dianping.com/weixin",filter:reg});
 
 
-	  	// req.addListener('data', function(postDataChunk) {
-    //    		postData += postDataChunk;
-
-	   //  });
-
-	   //  req.addListener('end', function() {
-	   //      if(postData)
-	   //     		postData =(postData.indexOf('{') === 0) ? JSON.parse(postData) : querystring.parse(postData);
-	   //  });
-
-	    if(query.url){
-
-	    	var page = new Page(query);
-
-
-	    	page.on('success',function(){
-
-	    	});
-
-	    	page.init();
-
-
-
-
-
-	    }
+page.on('success',function(){
+	console.log(JSON.stringify(this.content));
 });
 
+page.init();
 
-console.log("server started");
+// });
+
+
+// console.log("server started");
 
 
 // process.argv.forEach(function (val, index, array) {
