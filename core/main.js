@@ -35,7 +35,7 @@ var server = http.createServer(function (req, res) {
                 res.writeHead(404);
             }
 
-            console.info('['+date.getTime()+'] Process ended at ' + date.getTime());
+
         }
 
     if(targetUrl){
@@ -59,7 +59,7 @@ var server = http.createServer(function (req, res) {
                         res.end('');
                     }
                     try{
-                        crawl = spawn('phantomjs',['spider/app.js',targetUrl]);
+                        crawl = spawn('phantomjs',['./spider/app.js',targetUrl]);
 
                     }catch(e){
                         console.error('['+date.getTime()+']' + e.message);
@@ -67,14 +67,18 @@ var server = http.createServer(function (req, res) {
                     spawnCount ++;
                     console.info('['+date.getTime()+'] Cache empty, starting calling crawl');
                     console.info('['+date.getTime()+'] ...Processing...');
-                    crawl.on('message',function(result){
-                        resData += result.data;
+
+
+                    crawl.stdout.setEncoding('utf8');
+                    crawl.stdout.on('data', function(data) {
+                        console.log(data)
+                        resData += data;
                     });
-                    crawl.on('exit',function(){
-                       /* fs.writeFile(filePath, resData, function (err) {
-                            if (err) throw err;
-                            console.info('['+date.getTime()+'] Cache saved as '+ filePath);
-                        });*/
+                    crawl.stderr.on('data', function(data) {
+                        console.error('['+date.getTime()+'] ' + data);
+                    });
+                    crawl.on('close',function(){
+                        fs.writeFileSync(filePath, resData);
                         spawnCount --;
                         responseLogic(resData);
 

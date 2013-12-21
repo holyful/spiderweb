@@ -48,7 +48,7 @@ Page.prototype.init = function(){
 
 		self.regListener = self.filter.length || 0;
 
-		!self.regListener ? self.injectHook() : self.fire("success");
+		self.regListener ? self.injectHook() : self.fire("success");
 
 	})
 
