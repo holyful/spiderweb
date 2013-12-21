@@ -50,7 +50,7 @@ spiderweb部署在静态集群（nginx或apache）之后，与应用同级，通
 
 ## 配置事例
 
-<code>
+
     ...
     #判断爬虫
     if ($http_user_agent ~* "qihoobot|Baiduspider|Googlebot|Googlebot-Mobile|Googlebot-Image|Mediapartners-Google|Adsbot-Google|Feedfetcher-Google|Yahoo! Slurp|Yahoo! Slurp China|YoudaoBot|Sosospider|Sogou spider|Sogou web spider|MSNBot|ia_archiver|Tomato Bot") {
@@ -77,4 +77,4 @@ spiderweb部署在静态集群（nginx或apache）之后，与应用同级，通
         }
     }
 
-</code>
+
