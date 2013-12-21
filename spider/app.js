@@ -23,11 +23,7 @@ var page = new Page({url:targetUrl,filter:reg});
 
 page.on('success',function(){
 
-
-
 	console.log(this.content);
-
-
     phantom.exit(-1);
 });
 
