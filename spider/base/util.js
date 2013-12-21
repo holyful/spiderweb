@@ -1,9 +1,3 @@
-dbg = function(p){
-	console.log(JSON.stringify(p));
-}
-
-
-
 var fun ={};
 
 fun.isString = function(str){
@@ -18,6 +12,11 @@ fun.isObject = function(array){
 fun.isNumber = function(num){
 	return typeof num === "number" ? true : false;
 }
+fun.isFunction = function(fn){
+	return Object.prototype.toString.call(fn).indexOf("object Function") !== -1 ? true : false;
+}
+
+
 fun.trim = function(str){
 	return str.replace(/(^\s*)|(\s*$)/g,"");
 }
@@ -80,10 +79,11 @@ fun.parse = function(query){
 	if(query){
 		var result = {};
 
-		query = query.replace(/^\//,"");
+		query = query.replace(/^\/\?/,"");
 
 		var  params = query.split("&");
 		
+
 		
 		
 		var item ;		
@@ -100,11 +100,9 @@ fun.parse = function(query){
 
 		}
 
+
 	}
 
-
-
-	
+	return result;
 }
-
-module.exports = fun;
+module.exports  = fun;
