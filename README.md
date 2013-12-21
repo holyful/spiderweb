@@ -25,3 +25,20 @@ spiderweb
 * 缓存处理模块
 * 维护生命周期
 * 写缓存
+
+# 运行
+
+## 启动
+<code>
+    # sh spiderweb start
+</code>
+
+## debug
+<code>
+    # sh spiderweb debug
+</code>
+
+## 停止
+<code>
+    # sh spiderweb stop
+</code>
