@@ -36,7 +36,7 @@ if (cluster.isMaster) {
 
 } else {
 
-    var server = http.createServer().listen(5541, "127.0.0.1");
+    var server = http.createServer().listen(configs.port, configs.address);
     server.on('error',function(e){
         console.error('['+date().getTime()+']' + e.message);
     });
