@@ -13,7 +13,7 @@ var system =require('system');
 var args = system.args;
 
 
-var targetUrl = args[2];
+var targetUrl = args[1];
 
 // var query = Util.parse(req.url);
 

@@ -78,7 +78,7 @@ var server = http.createServer(function (req, res) {
                         console.error('['+date.getTime()+'] ' + data);
                     });
                     crawl.on('close',function(){
-                        fs.writeFileSync(filePath, resData);
+                        //fs.writeFileSync(filePath, resData);
                         spawnCount --;
                         responseLogic(resData);
 
