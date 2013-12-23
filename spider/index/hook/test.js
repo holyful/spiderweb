@@ -1,7 +1,21 @@
-setTimeout(function(){
+setTimeout(function(){	
+	var elem = $(".deallist")[0];
 
-	if (typeof window.callPhantom === 'function') {
-		  var status = window.callPhantom();
+	var evt = document.createEvent("MouseEvents");
+  	evt.initEvent('mousewheel', true, true);
+  	evt.wheelDelta = -1000;
+  	setInterval(function(){elem.dispatchEvent(evt)},200);
+
+  	setInterval(function(){
+  		if (typeof window.callPhantom === 'function') {
+			window.callPhantom();
 		}
+  	},5000);
 
-},5000)
+},3000);
+
+
+
+
+
+//1349
