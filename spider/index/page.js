@@ -18,8 +18,8 @@ function _filter(url,reg){
 
 	if(url){
 		for(key in reg){
-
-			if(url.indexOf(key) != -1){
+			var ruler = new RegExp(key);
+			if(ruler.test(url)){
 				result = reg[key];
 				break;
 			}
@@ -48,7 +48,7 @@ Page.prototype.init = function(){
 
 	page.open(self.url,function(){
 
-		self.regListener = self.filter.length || 0;
+		self.regListener = self.filter.length || false;
 
 		self.regListener ? self.injectHook() : self.fire("success");
 
