@@ -4,4 +4,4 @@ setTimeout(function(){
 		  var status = window.callPhantom();
 		}
 
-},5000)
+},10000)

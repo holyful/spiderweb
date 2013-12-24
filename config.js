@@ -17,7 +17,7 @@ var options = {
     /**
      * 监听地址
      */
-    address: '127.0.0.1',
+    address: 'localhost',
 
     /**
      * 并发phantom进程数
@@ -27,10 +27,10 @@ var options = {
     /**
      * 是否启用并发
      */
-    concurrent : false,
+    concurrent : true,
 
     /**
-     * 需要特别处理的url规则
+     * 需要特别处理的url规则，包括需要进行爬虫的url
      */
     specialUrl: {
        'http://mm.dianping.com/weixin': ['test.js']

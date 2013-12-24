@@ -47,6 +47,8 @@ if (cluster.isMaster && configs.concurrent) {
             targetUrl = null, resData = null;
         if(targetQuery){
             targetUrl = queryString.parse(targetQuery).targetUrl;
+        }else{
+            targetUrl = req.headers['spider-host'];
         }
         var resData = '', crawl = null;
 
@@ -83,7 +85,7 @@ if (cluster.isMaster && configs.concurrent) {
                         }catch(e){
                             console.error('['+date().getTime()+'] ' + e.message);
                         }
-                        console.info('['+date().getTime()+'] Cache empty, starting calling crawl');
+                        console.info('['+date().getTime()+'] Cache empty, starting calling spider');
                         console.info('['+date().getTime()+'] Processing ...');
                         res.setHeader('Transfer-Encoding', 'chunked');
                         res.writeHead(200, {'Content-Type': 'text/html'});
