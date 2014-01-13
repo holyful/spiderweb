@@ -15,7 +15,3 @@ setTimeout(function(){
 },3000);
 
 
-
-
-
-//1349
