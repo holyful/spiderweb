@@ -2,7 +2,7 @@
     "name": "spiderweb",
     "version": "0.0.1",
     "dependencies" : {
-        "phantomjs" : ">1.0.0",
+        "phantomjs" : "1.9.2",
         "cheerio" : "0.12.4"
     }
 }
