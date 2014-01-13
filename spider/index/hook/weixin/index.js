@@ -1,4 +1,5 @@
-setTimeout(function(){	
+setTimeout(function(){
+
 	var elem = $(".deallist")[0];
 
 	var evt = document.createEvent("MouseEvents");

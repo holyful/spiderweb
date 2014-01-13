@@ -33,7 +33,7 @@ var options = {
      * 需要特别处理的url规则，包括需要进行爬虫的url
      */
     specialUrl: {
-       'http://mm.dianping.com/weixin': ['test.js']
+       'http://mm.dianping.com/weixin/#detail~149306': ['test.js']
     }
 
 
