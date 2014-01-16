@@ -1,7 +1,6 @@
 setTimeout(function(){
 
-	var elem = $(".deallist")[0];
-
+	var elem = document.getElementsByClassName("deallist")[0];
 	var evt = document.createEvent("MouseEvents");
   	evt.initEvent('mousewheel', true, true);
   	evt.wheelDelta = -1000;
