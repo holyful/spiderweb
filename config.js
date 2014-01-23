@@ -34,9 +34,13 @@ var options = {
      */
     specialUrl: {
        'http://mm.dianping.com/weixin/#detail~149306': ['test.js']
-    }
+    },
 
-
+    /**
+     * seolink 处理
+     */
+    prettyAjaxKey:'?_escaped_fragment_=',
+    prettyAjaxPattern: '#!'
 
 };
 
