@@ -57,6 +57,13 @@ if (cluster.isMaster && configs.concurrent) {
             try{
                 console.info('['+date().getTime()+'] -----------------------------------------');
                 console.info('['+date().getTime()+'] Target url '+ targetUrl);
+                //pretty ajax url
+                console.info('['+date().getTime()+'] Interpret pretty ajax url');
+
+                if(configs.prettyAjaxKey && configs.prettyAjaxPattern){
+                    targetUrl = targetUrl.replace(configs.prettyAjaxKey, configs.prettyAjaxPattern);
+                }
+                console.info('['+date().getTime()+'] Refined target url '+ targetUrl);
                 console.info('['+date().getTime()+'] Process started at ' + date().getTime());
                 var fileHash = crypto.createHash('md5').update(targetUrl+"").digest('hex'),
                     filePath = __dirname + '/../' + configs.cacheDirectory  + fileHash + '.html';
