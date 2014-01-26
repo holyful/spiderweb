@@ -3,6 +3,7 @@
     "version": "0.0.1",
     "dependencies" : {
         "phantomjs" : ">1.0.0",
-        "cheerio" : "0.12.4"
+        "cheerio" : "0.12.4",
+        "memcached" : ">0.0.0"
     }
 }

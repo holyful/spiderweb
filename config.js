@@ -36,6 +36,13 @@ var options = {
        'http://mm.dianping.com/weixin/#detail~149306': ['test.js']
     },
 
+    memcached: {
+        location: '192.168.7.94:11211',
+        options: {},
+        lifeTime: 300
+    },
+
+
     /**
      * seolink 处理
      */
