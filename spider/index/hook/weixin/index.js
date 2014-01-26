@@ -4,7 +4,11 @@ setTimeout(function(){
 	var evt = document.createEvent("MouseEvents");
   	evt.initEvent('mousewheel', true, true);
   	evt.wheelDelta = -1000;
-  	setInterval(function(){elem.dispatchEvent(evt)},200);
+  	setInterval(function(){
+        if(elem){
+            elem.dispatchEvent(evt)
+        };
+    },200);
 
   	setInterval(function(){
   		if (typeof window.callPhantom === 'function') {
@@ -12,6 +16,6 @@ setTimeout(function(){
 		}
   	},5000);
 
-},3000);
+},30000);
 
 

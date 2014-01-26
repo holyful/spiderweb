@@ -27,16 +27,27 @@ var options = {
     /**
      * 是否启用并发
      */
-    concurrent : true,
+    concurrent : false,
 
     /**
      * 需要特别处理的url规则，包括需要进行爬虫的url
      */
     specialUrl: {
        'http://mm.dianping.com/weixin/#detail~149306': ['test.js']
-    }
+    },
+
+    memcached: {
+        location: '192.168.7.94:11211',
+        options: {},
+        lifeTime: 300
+    },
 
 
+    /**
+     * seolink 处理
+     */
+    prettyAjaxKey:'?_escaped_fragment_=',
+    prettyAjaxPattern: '#'
 
 };
 

@@ -15,10 +15,13 @@ var http = require('http'),
     requestQueue = [],
     date = null,
     cluster = require('cluster'),
-    numWks = configs.concurrentWorkers;
+    Memcached = require('memcached'),
+    numWks = configs.concurrentWorkers,
     date = function(){
         return (new Date());
-    };
+    },
+    //创建memcached实例
+    memcached = new Memcached(configs.memcached.location,configs.memcached.options);
 
 if (cluster.isMaster && configs.concurrent) {
     //创建集群
@@ -57,60 +60,82 @@ if (cluster.isMaster && configs.concurrent) {
             try{
                 console.info('['+date().getTime()+'] -----------------------------------------');
                 console.info('['+date().getTime()+'] Target url '+ targetUrl);
+                //pretty ajax url
+                console.info('['+date().getTime()+'] Interpret pretty ajax url');
+
+                if(configs.prettyAjaxKey && configs.prettyAjaxPattern){
+                    targetUrl = targetUrl.replace(configs.prettyAjaxKey, configs.prettyAjaxPattern);
+                }
+                console.info('['+date().getTime()+'] Refined target url '+ targetUrl);
                 console.info('['+date().getTime()+'] Process started at ' + date().getTime());
                 var fileHash = crypto.createHash('md5').update(targetUrl+"").digest('hex'),
                     filePath = __dirname + '/../' + configs.cacheDirectory  + fileHash + '.html';
 
-                fs.exists(filePath, function(exists) {
-                    if (exists) {
-                        console.info('['+date().getTime()+'] Cache found, start reading');
-                        var fStream = fs.createReadStream(filePath,{encoding: 'utf8'});
+                memcached.get(targetUrl, function (err, data) {
+                    //判断cache是否存在
+                    if(err){
+                        console.error('['+date().getTime()+'] Cache server error');
+                    }else{
+                        if(data){
+                            console.info('['+date().getTime()+'] Cache found, start reading');
+                            res.setHeader('Transfer-Encoding', 'chunked');
+                            res.writeHead(200, {'Content-Type': 'text/html'});
 
-                        res.setHeader('Transfer-Encoding', 'chunked');
-                        res.writeHead(200, {'Content-Type': 'text/html'});
-
-                        fStream.on("data", function(data) {
-                            console.info('['+date().getTime()+'] reading data ...');
-                            res.write(data);
-                        });
-                        fStream.once("end", function() {
                             console.info('['+date().getTime()+'] data completed.');
-
-                            res.end();
-                        });
-
-                    } else {
-                        try{
-                            crawl = spawn('phantomjs',[__dirname + '/../spider/app.js',targetUrl]);
-                        }catch(e){
-                            console.error('['+date().getTime()+'] ' + e.message);
-                        }
-                        console.info('['+date().getTime()+'] Cache empty, starting calling spider');
-                        console.info('['+date().getTime()+'] Processing ...');
-                        res.setHeader('Transfer-Encoding', 'chunked');
-                        res.writeHead(200, {'Content-Type': 'text/html'});
-
-                        var writeSteam = fs.createWriteStream(filePath,{encoding: 'utf8'})
-                        crawl.stdout.setEncoding('utf8');
-                        crawl.stdout.on('data', function(data) {
-                            console.info('['+date().getTime()+'] transmitting data ...' );
-                            writeSteam.write(data);
                             res.write(data);
-                        });
-                        crawl.stderr.on('data', function(data) {
-                            console.error('['+date().getTime()+'] ' + data);
-                        });
-                        crawl.on('close',function(){
-
-                            console.info('['+date().getTime()+'] data completed, crawler stopped' );
-                            writeSteam.close();
                             res.end();
 
-                        });
+                        }else{
+
+                            console.info('['+date().getTime()+'] Cache empty, start calling crawler');
+                            try{
+                                crawl = spawn(__dirname + '/../node_modules/.bin/phantomjs',[__dirname + '/../spider/app.js',targetUrl]);
+                            }catch(e){
+                                console.error('['+date().getTime()+'] ' + e.message);
+                                exit(-1);
+                            }
+
+                            var finalData = '';
+                            console.info('['+date().getTime()+'] Processing ...');
+                            res.setHeader('Transfer-Encoding', 'chunked');
+                            res.writeHead(200, {'Content-Type': 'text/html'});
+
+                            crawl.stdout.setEncoding('utf8');
+                            crawl.stdout.on('data', function(data) {
+                                console.info('['+date().getTime()+'] transmitting data ...' );
+                                finalData += data;
+                                res.write(data);
+                            });
+                            crawl.stderr.on('data', function(data) {
+                                console.error('['+date().getTime()+'] ' + data);
+                            });
+                            crawl.on('close',function(){
+                                console.info('['+date().getTime()+'] data completed, crawler stopped' );
+                                //写入cache
+                                memcached.set(targetUrl,finalData,configs.memcached.lifeTime,function(err){
+
+                                    if(err){
+                                        console.error('['+date().getTime()+'] Cache store error');
+                                    }else{
+                                        console.info('['+date().getTime()+'] Cache store succeed');
+                                    }
+                                    memcached.end();
+                                    res.end();
+                                });
+
+
+                            });
+
+
+
+                        }
+
+
                     }
+
+
+
                 });
-
-
 
             }catch(e){
                 console.error('['+date().getTime()+'] ' + e.message);
