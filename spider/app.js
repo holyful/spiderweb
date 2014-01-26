@@ -19,15 +19,21 @@ var targetUrl = args[1];
 
 var reg = __CONFIG__["filter"];
 
-var page = new Page({url:targetUrl,filter:reg});
+var page = new Page({url:targetUrl,filter:reg},__CONFIG__.debug);
 
-page.on('success',function(){
+page.on('success',function(page){
 
-	console.log(this.content);
+	console.log(page.content);
+
     phantom.exit(-1);
+
 });
 
+page.limitLoad(__CONFIG__.limit)
+
 page.init();
+
+
 
 // });
 

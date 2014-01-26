@@ -60,18 +60,20 @@ fun.valueIndexOf = function(obj,val,deep){
 	}
 }
 fun.mix = function(first,second,m){
-       
-     for (key in second) {
-          if (!m) { //不像 for in operator, hasownproperty 不追踪prototype chain
-               if(first[key]){
-                    continue;
-               }
-               first[key] = second[key];
-          }else{
-          	  	first[key] = second[key];
-          }
-     }
-     return first;
+    if(fun.isObject(first) && fun.isObject(second)){   
+	    for (key in second) {
+	          if (!m) { //不像 for in operator, hasownproperty 不追踪prototype chain
+	               if(first[key]){
+	                    continue;
+	               }
+	               first[key] = second[key];
+	          }else{
+	          	  	first[key] = second[key];
+	          }
+	     }
+	}
+     
+    return first;
 }
 
 
@@ -105,4 +107,16 @@ fun.parse = function(query){
 
 	return result;
 }
+
+fun.bind = function(fn,bind){
+    return function(){
+        return fun.isFunction(fn)? fn.apply (bind, arguments):false;
+    }
+}
+
+
+fun.dbg = function(obj){
+	console.log(JSON.stringify(obj));
+}
+
 module.exports  = fun;

@@ -7,8 +7,10 @@ module.exports = {
 		"^(http:\\/\\/)?mm.dianping.com\\/weixin((\\/\\?)|(\\/\\/)|(\\/)|(\\/\\?\\/))?#?$":["weixin/index"],
 		//匹配详情页
 		"^(http:\\/\\/)?mm.dianping.com\\/weixin((\\/\\?)|(\\/\\/)|(\\/)|(\\/\\?\\/))?#detail~\\d+$":["weixin/detail"]
-	}
+	},
 
+	debug:true
+	
 }
 
 
