@@ -71,7 +71,7 @@ if (cluster.isMaster && configs.concurrent) {
                 var fileHash = crypto.createHash('md5').update(targetUrl+"").digest('hex'),
                     filePath = __dirname + '/../' + configs.cacheDirectory  + fileHash + '.html';
 
-                memcached.get(targetUrl,function (err, data) {
+                memcached.get(targetUrl, function (err, data) {
                     //判断cache是否存在
                     if(err){
                         console.error('['+date().getTime()+'] Cache server error');
@@ -89,9 +89,10 @@ if (cluster.isMaster && configs.concurrent) {
 
                             console.info('['+date().getTime()+'] Cache empty, start calling crawler');
                             try{
-                                crawl = spawn('phantomjs',[__dirname + '/../spider/app.js',targetUrl]);
+                                crawl = spawn(__dirname + '/../node_modules/.bin/phantomjs',[__dirname + '/../spider/app.js',targetUrl]);
                             }catch(e){
                                 console.error('['+date().getTime()+'] ' + e.message);
+                                exit(-1);
                             }
 
                             var finalData = '';
@@ -110,6 +111,7 @@ if (cluster.isMaster && configs.concurrent) {
                             });
                             crawl.on('close',function(){
                                 console.info('['+date().getTime()+'] data completed, crawler stopped' );
+                                //写入cache
                                 memcached.set(targetUrl,finalData,configs.memcached.lifeTime,function(err){
 
                                     if(err){
@@ -134,9 +136,6 @@ if (cluster.isMaster && configs.concurrent) {
 
 
                 });
-
-
-
 
             }catch(e){
                 console.error('['+date().getTime()+'] ' + e.message);
