@@ -1,11 +1,6 @@
-setTimeout(function(){
 
-    setInterval(function(){
-        if (typeof window.callPhantom === 'function') {
-            window.callPhantom();
-        }
-    },1000);
-
-},30000);
-
-
+setInterval(function(){
+    if (typeof window.callPhantom === 'function') {
+        window.callPhantom();
+    }
+},50);
