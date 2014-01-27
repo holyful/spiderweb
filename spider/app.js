@@ -4,7 +4,7 @@
 
 var Page = require("./index/page");
 
-var __CONFIG__ = require("./base/config");
+var __CONFIG__ = require("./config");
 
 var Util = require('./base/util');
 var system =require('system');

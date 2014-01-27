@@ -1,3 +1,4 @@
+var globalConfigs = require('../config.js');
 module.exports = {
 
 	port: 2000,
@@ -8,11 +9,11 @@ module.exports = {
 		//匹配详情页
 		"^(http:\\/\\/)?mm.dianping.com\\/weixin((\\/\\?)|(\\/\\/)|(\\/)|(\\/\\?\\/))?#detail~\\d+$":["weixin/detail"],
 
-		"^(http:\\/\\/)?m.dianping.com\\/waimai((\\/\\?)|(\\/\\/)|(\\/)|(\\/\\?\\/))?#?$":["waimai/index"],
+		"^(http:\\/\\/)?m.dianping.com\\/waimai((\\/\\?)|(\\/\\/)|(\\/)|(\\/\\?\\/))?#?$":["waimai/index"]
 
 	},
 
-	debug:true
+	debug: globalConfigs.debug
 
 }
 

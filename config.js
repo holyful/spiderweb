@@ -47,7 +47,9 @@ var options = {
      * seolink 处理
      */
     prettyAjaxKey:'?_escaped_fragment_=',
-    prettyAjaxPattern: '#'
+    prettyAjaxPattern: '#',
+
+    debug: true
 
 };
 
