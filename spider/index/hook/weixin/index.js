@@ -1,21 +1,18 @@
-setTimeout(function(){
 
-	var elem = document.getElementsByClassName("deallist")[0];
-	var evt = document.createEvent("MouseEvents");
-  	evt.initEvent('mousewheel', true, true);
-  	evt.wheelDelta = -1000;
-  	setInterval(function(){
-        if(elem){
-            elem.dispatchEvent(evt)
-        };
-    },200);
+setInterval(function(){
 
-  	setInterval(function(){
-  		if (typeof window.callPhantom === 'function') {
-			window.callPhantom();
-		}
-  	},5000);
+    var elem = document.getElementsByClassName("deallist")[0];
 
-},3000);
+    if(elem){
+        var evt = document.createEvent("MouseEvents");
+        evt.initEvent('mousewheel', true, true);
+        evt.wheelDelta = -1000;
+        elem.dispatchEvent(evt);
+        if (typeof window.callPhantom === 'function') {
+            window.callPhantom();
+        }
+    };
+
+},50);
 
 
