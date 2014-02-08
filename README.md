@@ -48,33 +48,18 @@ spiderweb
 ## 部署概述
 spiderweb部署在静态集群（nginx或apache）之后，与应用同级，通过静态集群判断是否爬虫而反向代理至spiderweb或者应用
 
-## 配置事例
+## 配置示例
+location / {
+        resolver 8.8.8.8;
+        proxy_pass http://$host$request_uri;
+        if ($http_user_agent ~* "qihoobot|Baiduspider|Googlebot|Googlebot-Mobile|Googlebot-Image|Mediapartners-Google|Adsbot-Google|Feedfetcher-Google|Yahoo! Slurp|Yahoo! Slurp China|YoudaoBot|Sosospider|Sogou spider|Sogou web spider|MSNBot|ia_archiver|Tomato Bot") {
+                proxy_pass http://seobackend?targetUrl=$scheme://$host$request_uri;
 
-
-    ...
-    #判断爬虫
-    if ($http_user_agent ~* "qihoobot|Baiduspider|Googlebot|Googlebot-Mobile|Googlebot-Image|Mediapartners-Google|Adsbot-Google|Feedfetcher-Google|Yahoo! Slurp|Yahoo! Slurp China|YoudaoBot|Sosospider|Sogou spider|Sogou web spider|MSNBot|ia_archiver|Tomato Bot") {
-        ##spiderweb反向代理
-        location ~ ^/(.*)$ {
-            proxy_pass http://localhost:5542;
-            proxy_redirect          off;
-            proxy_set_header        Host $host;
-            client_max_body_size    10m;
-            client_body_buffer_size 128k;
-            proxy_connect_timeout   90;
-            proxy_send_timeout      90;
-            proxy_read_timeout      90;
-            proxy_buffer_size       4k;
-            proxy_buffers           4 32k;
-            proxy_busy_buffers_size 64k;
-            proxy_temp_file_write_size 64k;
         }
-    }else{
-        #正常应用反向代理
-        location ~ ^/(.*)$ {
-            proxy_pass http://localhost:8080;
-            ...
-        }
-    }
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_next_upstream error timeout http_500 http_502 http_503 http_504;
+        chunked_transfer_encoding       off;
+}
 
 
