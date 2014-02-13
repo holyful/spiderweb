@@ -49,7 +49,14 @@ var options = {
     prettyAjaxKey:'?_escaped_fragment_=',
     prettyAjaxPattern: '#',
 
-    debug: true
+    debug: true,
+
+    //memcache管理端口
+    memcachedOp:{
+        host:"localhost",
+        port:1111
+    }
+
 
 };
 

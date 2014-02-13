@@ -6,8 +6,8 @@ fun.isString = function(str){
 fun.isArray = function(array){
 	return Object.prototype.toString.call(array).indexOf("Array") !== -1 ? true : false;
 }
-fun.isObject = function(array){
-	return Object.prototype.toString.call(array).indexOf("object Object") !== -1 ? true : false;
+fun.isObject = function(obj){
+	return Object.prototype.toString.call(obj).indexOf("object Object") !== -1 ? true : false;
 }
 fun.isNumber = function(num){
 	return typeof num === "number" ? true : false;

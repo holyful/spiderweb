@@ -61,15 +61,3 @@ var service = server.listen(__CONFIG__.port, function(req, res) {
 
 
 console.log("server start:"+__CONFIG__.port)
-
-// console.log("server started");
-
-
-// process.argv.forEach(function (val, index, array) {
-//     if(index === 2){
-//         targetUrl = val;
-//     }
-// });
-// //-------
-// process.send({data:data });
-// process.exit();
