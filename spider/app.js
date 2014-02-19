@@ -25,6 +25,7 @@ phantom.addCookie({
 
 var page = new Page({url:targetUrl,filter:reg},__CONFIG__.debug);
 
+// 成功抓取回调
 page.on('success',function(page){
 
 	console.log(page.content);
@@ -32,6 +33,17 @@ page.on('success',function(page){
     phantom.exit(-1);
 
 });
+
+//抓取失败
+timer = setTimeout(function(){
+	
+	console.error("出问题了啦");
+
+	phantom.exit(-1);
+
+},12000)
+
+
 
 page.limitLoad(__CONFIG__.limit)
 
