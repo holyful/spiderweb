@@ -8,6 +8,19 @@ var __CONFIG__ = require("./config");
 
 var Util = require('./base/util');
 
+
+// 一切为了微信
+phantom.addCookie({
+  'name'     : 'test',   /* required property */
+  'value'    : '2332',  /* required property */
+  'domain'   : 'mm.dianping.com',           /* required property */
+  'path'     : '',
+  'httponly' : true,
+  'secure'   : false,
+  'expires'  : (new Date()).getTime() + (1000 * 60 * 60)
+});
+
+
 var service = server.listen(__CONFIG__.port, function(req, res) {
 
 

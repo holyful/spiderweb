@@ -1,4 +1,3 @@
-
 setInterval(function(){
 	var dom = document.getElementsByClassName("shop-list");
 

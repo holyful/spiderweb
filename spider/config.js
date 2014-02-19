@@ -13,7 +13,7 @@ module.exports = {
 
 	},
 
-	debug: globalConfigs.debug
+	debug: globalConfigs.debug || false
 
 }
 
